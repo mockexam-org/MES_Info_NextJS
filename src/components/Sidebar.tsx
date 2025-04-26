@@ -1,55 +1,78 @@
 "use client";
+import React, { useState } from "react";
+import data from "@/app/data.js";
 
-import Link from "next/link";
-import { useState } from "react";
-
-export default function Sidebar() {
-  const [isOpen, setOpen] = useState(false);
+const Sidebar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <>
-      <button
-        onClick={() => setOpen(!isOpen)}
-        className='fixed bottom-4 left-4 p-2 bg-gray-800 text-white rounded-full shadow-md test-sm'
+    <div className='flex'>
+      {/* Sidebar */}
+      <div
+        className={`bg-gray-800 text-white 
+                    fixed h-screen transition-all 
+                    duration-300 z-10
+                    ${isOpen ? "w-64" : "w-0 overflow-hidden"}`}
       >
-        {isOpen ? "Hide Sidebar" : "Show Sidebar"}
-      </button>
-
-      {isOpen && (
-        <div 
-        className={'w-64 text-gray-800 bg-white p-4 border border-black shadow-lg ${ isOpen ? "translate-x-0" : "-translate-x-full"}'}
-        >
-          <h2 className='text-xl font-bold mb-6'>Information</h2>
-          <nav>
-            <ul className='space-y-2'>
-              <li>
-                <Link
-                  href='/'
-                  className='block px-4 py-2 rounded hover:bg-gray-700'
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/dashboard'
-                  className='block px-4 py-2 rounded hover:bg-gray-700'
-                >
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href='/settings'
-                  className='block px-4 py-2 rounded hover:bg-gray-700'
-                >
-                  Settings
-                </Link>
-              </li>
-            </ul>
-          </nav>
+        {/* Sidebar content */}
+        <div className='flex flex-col items-center'>
+          <h2 className='text-2xl font-bold mt-4'>Information</h2>
+          {data.map((item, index) => (
+            <div className='mt-4'>
+              <a href='#' className='text-white hover:text-gray-300'>
+                {item.title}
+              </a>
+            </div>
+          ))}
         </div>
-      )}
-    </>
+      </div>
+
+      {/* Main content */}
+      <div className={`flex-1 p-4 ${isOpen ? "ml-64" : "ml-0"}`}>
+        {/* Button to toggle sidebar */}
+        <div className='ml-auto'>
+          <button
+            className='bg-blue-500 hover:bg-blue-700 
+                       text-white font-bold py-2 px-4 rounded'
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {/* Toggle icon based on isOpen state */}
+            {isOpen ? (
+              <svg
+                className='h-6 w-6'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M6 18L18 6M6 6l12 12'
+                />
+              </svg>
+            ) : (
+              <svg
+                className='h-6 w-6'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M4 6h16M4 12h16m-7 6h7'
+                />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
   );
-}
+};
+
+export default Sidebar;
